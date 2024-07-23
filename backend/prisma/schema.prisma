@@ -41,12 +41,12 @@ model Review {
   id        Int      @id @default(autoincrement())
   content   String
   rating    Int
+  perfumeId Int
+  userId    Int
+  perfume   Perfume  @relation(fields: [perfumeId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  perfumeId Int
-  perfume   Perfume  @relation(fields: [perfumeId], references: [id])
 }
 
 model Note {
@@ -55,15 +55,30 @@ model Note {
   perfumes PerfumeNote[]
 }
 
+enum NoteType {
+  TOP
+  MIDDLE
+  BASE
+}
+
 model PerfumeNote {
+  id        Int      @id @default(autoincrement())
   perfumeId Int
   noteId    Int
-  Perfume   Perfume @relation(fields: [perfumeId], references: [id])
-  Note      Note    @relation(fields: [noteId], references: [id])
-
-  @@id([perfumeId, noteId])
-  @@unique([perfumeId, noteId])
+  type      NoteType
+  perfume   Perfume  @relation(fields: [perfumeId], references: [id])
+  note      Note     @relation(fields: [noteId], references: [id])
 }
+
+// model PerfumeNote {
+//   perfumeId Int
+//   noteId    Int
+//   Perfume   Perfume @relation(fields: [perfumeId], references: [id])
+//   Note      Note    @relation(fields: [noteId], references: [id])
+
+//   @@id([perfumeId, noteId])
+//   @@unique([perfumeId, noteId])
+// }
 
 enum Role {
   ADMIN
